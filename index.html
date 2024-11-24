@@ -33,6 +33,7 @@
             animation: typing 3s steps(30) 1s forwards, blink 0.75s step-end infinite;
             white-space: nowrap;
             overflow: hidden;
+            border-right: 2px solid #00ff00;
         }
 
         @keyframes typing {
@@ -46,9 +47,14 @@
 
         #map-container {
             margin: 50px auto;
-            width: 80%;
+            width: 90%;
             height: 400px;
             position: relative;
+        }
+
+        #world-map {
+            width: 100%;
+            height: 100%;
         }
 
         #statistics {
@@ -125,7 +131,10 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            // Membuat titik acak di peta untuk menambah kesan hacker
+            // Mengubah warna peta menjadi hijau neon dengan filter CSS
+            map.getPanes().overlayPane.style.filter = 'hue-rotate(120deg)';
+
+            // Membuat titik acak di peta dengan warna hijau neon
             L.circle([51.505, -0.09], {
                 color: 'green',
                 fillColor: '#00ff00',
