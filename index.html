@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Futuristic Console</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #0c0c0c;
+            color: #00ff00;
+            overflow-x: hidden;
+        }
+
+        #console {
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        #terminal-text {
+            font-size: 24px;
+            animation: typing 3s steps(30) 1s forwards, blink 0.75s step-end infinite;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        #map-container {
+            margin: 50px auto;
+            width: 80%;
+            height: 400px;
+            background-color: black;
+            border: 1px solid #00ff00;
+            position: relative;
+        }
+
+        #statistics {
+            margin-top: 50px;
+        }
+
+        #data-graph {
+            max-width: 100%;
+            height: 300px;
+            margin: 0 auto;
+            background-color: black;
+            border: 1px solid #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div id="console">
+        <h1>Welcome to the Hacker Console</h1>
+        <p id="terminal-text">Initializing system...</p>
+        <div id="map-container">
+            <canvas id="world-map"></canvas>
+        </div>
+        <div id="statistics">
+            <h2>System Status</h2>
+            <canvas id="data-graph"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Untuk grafik -->
+    <script>
+        // Animasi untuk teks terminal
+        document.addEventListener('DOMContentLoaded', () => {
+            const terminalText = document.getElementById('terminal-text');
+            terminalText.textContent = 'Initializing system...\nConnection Established\nRunning Diagnostics...';
+
+            // Membuat grafik data
+            const ctx = document.getElementById('data-graph').getContext('2d');
+            const dataGraph = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    datasets: [{
+                        label: 'System Activity',
+                        data: [12, 19, 3, 5, 2, 3, 9],
+                        borderColor: '#00ff00',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#00ff00'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: '#00ff00'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Peta dunia dengan animasi (placeholder untuk peta dunia, Anda bisa menggunakan library seperti leaflet.js atau three.js)
+            const mapCanvas = document.getElementById('world-map');
+            const mapCtx = mapCanvas.getContext('2d');
+            mapCanvas.width = window.innerWidth * 0.8;
+            mapCanvas.height = 400;
+            
+            // Gambar peta dan aktifkan animasi pergerakan data
+            function drawMap() {
+                mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+                mapCtx.strokeStyle = "#00ff00";
+                mapCtx.beginPath();
+                mapCtx.arc(300, 200, 150, 0, Math.PI * 2); // Sebagai contoh, titik atau koneksi di peta
+                mapCtx.stroke();
+
+                requestAnimationFrame(drawMap);
+            }
+
+            drawMap();
+        });
+    </script>
+</body>
+</html>
