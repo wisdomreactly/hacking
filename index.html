@@ -303,7 +303,7 @@
             hashRateChart.data.labels.push(time);
             hashRateChart.data.datasets[0].data.push(hashRate);
 
-            if (hashRateChart.data.labels.length > 500) {
+            if (hashRateChart.data.labels.length > 20) {
                 hashRateChart.data.labels.shift();
                 hashRateChart.data.datasets[0].data.shift();
             }
