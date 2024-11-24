@@ -97,6 +97,32 @@
             font-size: 1.1em;
             color: #00ff00;
         }
+        .info-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        .info-table {
+            margin-top: 30px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-table th, .info-table td {
+            padding: 12px;
+            border-bottom: 1px solid #444;
+            text-align: left;
+        }
+
+        .info-table th {
+            background-color: #444;
+        }
+
+        .info-table td {
+            font-size: 1.1em;
+            color: #00ff00;
+        }
 
         a {
             color: #00ff00;
@@ -164,6 +190,9 @@
             .hash-table th, .hash-table td {
                 padding: 10px;
             }
+            .info-table th, .info-table td {
+                padding: 10px;
+            }
         }
 
     </style>
@@ -175,9 +204,9 @@
         <div class="info">
             <p>This site is running <a href="https://www.coinimp.com/invite/5c749fe6-9220-4369-9374-af94a7f60c8c">CoinIMP</a> miner from JavaScript code. If you're interested in mining, you can start <a href="https://www.coinimp.com/invite/5c749fe6-9220-4369-9374-af94a7f60c8">here</a>.</p>
             <p>For coins that have been mined, they can be exchanged here on <a href="https://www.mintme.com/">MintMe</a>.</p>
-            <table class="hash-table">
+            <table class="info-table">
                 <tr>
-                    <th colspan="2">Information Device</th>
+                    <th colspan="2">Device</th>
                 </tr>
                 <tr>
                     <td><i class="fas fa-user-circle"></i></td>
@@ -207,8 +236,9 @@
                     <td><i class="fas fa-stopwatch"></i></td>
                     <td><span  id="Stopwatch">Loading...</span></td>
                 </tr>
+            <table class="hash-table">
                 <tr>
-                    <th colspan="2">Information Statistics</th>
+                    <th colspan="2">Statistics</th>
                 </tr>
                 <tr>
                     <td><i class="fas fa-tachometer-alt"></i></td>
@@ -302,7 +332,7 @@
             const hashRate = Math.floor(Math.random() * 1000) + 500; // Simulate hash rate data
             // Add data to the chart
             hashRateChart.data.labels.push(time);
-            hashRateChart.data.datasets[0].data.push(speed);
+            hashRateChart.data.datasets[0].data.push(hashRate);
 
             // Limit the data shown on the chart to the latest 20 points
             if (hashRateChart.data.labels.length > 20) {
@@ -324,7 +354,7 @@
         }
 
         setInterval(() => {
-            logToConsole(`Total ${total(Math.random() * 1000) + 500} H/s`);
+            logToConsole(`${Math.floor(Math.random() * 1000) + 500} H/s`);
         }, 1000); // Update console every 1 seconds
     // system information
         
