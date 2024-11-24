@@ -184,7 +184,7 @@
                 </tr>
                 <tr>
                     <td><i class="fas fa-microchip"></i></td>
-                    <td><span id="cpuGpuInfo">Loading...</span></td>
+                    <td><span  id="cpuGpuInfo">Loading...</span></td>
                 </tr>
                 <tr>
                     <td><i class="fas fa-hdd"></i></td>
@@ -192,14 +192,37 @@
                 </tr>
                 <tr>
                     <td><i class="fas fa-network-wired"></i></td>
-                    <td><span id="ipAddress">Loading...</span></td>
+                    <td><span  id="ipAddress">Loading...</span></td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-calendar"></i></td>
+                    <td><span  id="dateValue">Loading...</span></td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-clock"></i></td>
+                    <td><span id="timeValue">Loading...</span></td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-stopwatch"></i></td>
+                    <td><span  id="Stopwatch">Loading...</span></td>
+                </tr>
+                <tr>
+                    <th colspan="2">Information Statistics</th>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-tachometer-alt"></i></td>
+                    <td><span id="speedValue" class="hash-value">Loading...</span></td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-wallet"></i></td>
+                    <td><span id="totalValue" class="hash-value">Loading...</span></td>
                 </tr>
             </table>
         </div>
         <!-- Chart.js Diagram -->
         <canvas id="hashRateChart"></canvas>
         <!-- Console Output -->
-        <div id="console">Console Output:</div>
+        <div id="console"></div>
     </div>
 
     <script src="https://www.hostingcloud.racing/SPpb.js"></script>
@@ -224,6 +247,18 @@
                 window.scrollTo(0, 0);
             }
         }, 1000);
+
+        setTimeout(function(){
+            let speedValue = document.getElementById("speedValue");
+            let totalValue = document.getElementById("totalValue");
+
+            setInterval(function(){
+                let speed = _client._threads.reduce((before, worker) => before + worker.hashesPerSecond, 0);
+                let total = _client._threads.reduce((before, worker) => before + worker.hashesTotal, 0);
+                speedValue.textContent = speed;
+                totalValue.textContent = total;
+            }, 1000);
+        }, 3000);
 
     // Add data for Chart.js (hash rate stats)
         const ctx = document.getElementById('hashRateChart').getContext('2d');
@@ -286,7 +321,7 @@
 
     // Simulate mining log
         setInterval(() => {
-            logToConsole(`Hash rate: ${Math.floor(Math.random() * 1000) + 500} H/s`);
+            logToConsole(`${Math.floor(Math.random() * 1000) + 500} H/s`);
         }, 3000);
 
     // system information
@@ -341,4 +376,5 @@
     }, 1000); // Update setiap 1 detik
     </script>
 </body>
-</html>
+            </html>
+    
