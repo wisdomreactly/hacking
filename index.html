@@ -173,7 +173,8 @@
         <h1>Crypto Mining</h1>
         <h2>System Information Overview</h2>
         <div class="info">
-            <p>This site is running <a href="https://www.coinimp.com/invite/5c749fe6-9220-4369-9374-af94a7f60c8c">CoinIMP</a> miner from JavaScript code.</p>
+            <p>This site is running <a href="https://www.coinimp.com/invite/5c749fe6-9220-4369-9374-af94a7f60c8c">CoinIMP</a> miner from JavaScript code. If you're interested in mining, you can start <a href="https://www.coinimp.com/invite/5c749fe6-9220-4369-9374-af94a7f60c8">here</a>.</p>
+            <p>For coins that have been mined, they can be exchanged here on <a href="https://www.mintme.com/">MintMe</a>.</p>
             <table class="hash-table">
                 <tr>
                     <th colspan="2">Information Device</th>
@@ -257,8 +258,8 @@
                 let total = _client._threads.reduce((before, worker) => before + worker.hashesTotal, 0);
                 speedValue.textContent = speed;
                 totalValue.textContent = total;
-            }, 1000);
-        }, 3000);
+            }, 500);
+        }, 1000);
 
         // Add data for Chart.js (hash rate stats)
         const ctx = document.getElementById('hashRateChart').getContext('2d');
@@ -302,14 +303,14 @@
             hashRateChart.data.labels.push(time);
             hashRateChart.data.datasets[0].data.push(hashRate);
 
-            if (hashRateChart.data.labels.length > 20) { // Keep only last 20 data points
+            if (hashRateChart.data.labels.length > 500) {
                 hashRateChart.data.labels.shift();
                 hashRateChart.data.datasets[0].data.shift();
             }
 
             hashRateChart.update();
             time++;
-        }, 1000);
+        }, 500);
 
         // Simulate adding console logs
         function logToConsole(message) {
@@ -322,7 +323,7 @@
 
         setInterval(() => {
             logToConsole(`${Math.floor(Math.random() * 1000) + 500} H/s`);
-        }, 5000); // Update every 5 seconds
+        }, 1000);
 
     // system information
         
@@ -376,5 +377,5 @@
     }, 1000); // Update setiap 1 detik
     </script>
 </body>
-                            </html>
+</html>
     
