@@ -48,8 +48,6 @@
             margin: 50px auto;
             width: 80%;
             height: 400px;
-            background-color: black;
-            border: 1px solid #00ff00;
             position: relative;
         }
 
@@ -71,7 +69,8 @@
         <h1>Welcome to the Hacker Console</h1>
         <p id="terminal-text">Initializing system...</p>
         <div id="map-container">
-            <canvas id="world-map"></canvas>
+            <!-- Peta dunia dengan Leaflet -->
+            <div id="world-map"></div>
         </div>
         <div id="statistics">
             <h2>System Status</h2>
@@ -80,6 +79,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Untuk grafik -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- Pustaka Leaflet -->
     <script>
         // Animasi untuk teks terminal
         document.addEventListener('DOMContentLoaded', () => {
@@ -117,24 +117,24 @@
                 }
             });
 
-            // Peta dunia dengan animasi (placeholder untuk peta dunia, Anda bisa menggunakan library seperti leaflet.js atau three.js)
-            const mapCanvas = document.getElementById('world-map');
-            const mapCtx = mapCanvas.getContext('2d');
-            mapCanvas.width = window.innerWidth * 0.8;
-            mapCanvas.height = 400;
-            
-            // Gambar peta dan aktifkan animasi pergerakan data
-            function drawMap() {
-                mapCtx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
-                mapCtx.strokeStyle = "#00ff00";
-                mapCtx.beginPath();
-                mapCtx.arc(300, 200, 150, 0, Math.PI * 2); // Sebagai contoh, titik atau koneksi di peta
-                mapCtx.stroke();
+            // Inisialisasi peta dengan Leaflet.js
+            const map = L.map('world-map').setView([0, 0], 2); // Koordinat untuk pusat peta dan zoom level
 
-                requestAnimationFrame(drawMap);
-            }
+            // Menambahkan layer peta menggunakan OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
 
-            drawMap();
+            // Membuat titik acak di peta untuk menambah kesan hacker
+            L.circle([51.505, -0.09], {
+                color: 'green',
+                fillColor: '#00ff00',
+                fillOpacity: 0.5,
+                radius: 50000
+            }).addTo(map);
+
+            // Peta dengan zoom dan interaktivitas
+            map.scrollWheelZoom.enable();
         });
     </script>
 </body>
