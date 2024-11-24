@@ -337,7 +337,7 @@
             hashRateChart.data.datasets[0].data.push(hashRate);
 
             // Limit the data shown on the chart to the latest 20 points
-            if (hashRateChart.data.labels.length > 10) {
+            if (hashRateChart.data.labels.length > 50) {
                 hashRateChart.data.labels.shift();
                 hashRateChart.data.datasets[0].data.shift();
             }
