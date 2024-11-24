@@ -3,147 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker Futuristic Console</title>
+    <title>Hacker Theme - Map, Diagram & Console</title>
+    <!-- Link ke stylesheet Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * {
+        /* Gaya halaman dengan tema hacker */
+        body {
+            background-color: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Courier New', monospace;
-            background-color: #0c0c0c;
-            color: #00ff00;
-            overflow-x: hidden;
-        }
-
-        #console {
             text-align: center;
-            padding: 50px;
         }
 
         h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
+            color: #00ff00;
+            font-size: 3em;
+            margin-top: 20px;
         }
 
-        #terminal-text {
-            font-size: 24px;
-            animation: typing 3s steps(30) 1s forwards, blink 0.75s step-end infinite;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: 2px solid #00ff00;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
-
-        #map-container {
-            margin: 50px auto;
-            width: 90%;
-            height: 400px;
-            position: relative;
-        }
-
-        #world-map {
+        /* Gaya untuk div peta */
+        #map {
+            height: 600px;
             width: 100%;
-            height: 100%;
+            border: 2px solid #00ff00;
         }
 
-        #statistics {
-            margin-top: 50px;
+        /* Gaya untuk elemen lainnya seperti teks */
+        .content {
+            margin: 20px;
+            font-size: 1.2em;
         }
 
-        #data-graph {
-            max-width: 100%;
-            height: 300px;
-            margin: 0 auto;
-            background-color: black;
+        .popup-content {
+            color: #00ff00;
+            font-size: 1.1em;
+        }
+
+        /* Gaya untuk Console */
+        #console {
+            background-color: #111;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            margin-top: 20px;
+            height: 200px;
+            overflow-y: scroll;
             border: 1px solid #00ff00;
+            white-space: pre-wrap;
         }
+
+        /* Gaya untuk diagram */
+        #chart-container {
+            margin: 40px auto;
+            width: 80%;
+            max-width: 800px;
+        }
+
     </style>
 </head>
 <body>
-    <div id="console">
-        <h1>Welcome to the Hacker Console</h1>
-        <p id="terminal-text">Initializing system...</p>
-        <div id="map-container">
-            <!-- Peta dunia dengan Leaflet -->
-            <div id="world-map"></div>
-        </div>
-        <div id="statistics">
-            <h2>System Status</h2>
-            <canvas id="data-graph"></canvas>
-        </div>
+    <h1>Hacker Theme - Map, Diagram & Console</h1>
+    <div class="content">
+        <p>Welcome to the hacker world! This page has everything you need: a map, a diagram, and a console for that futuristic hacker vibe.</p>
+    </div>
+    
+    <!-- Tempat peta akan muncul -->
+    <div id="map"></div>
+
+    <!-- Tempat untuk diagram -->
+    <div id="chart-container">
+        <canvas id="myChart"></canvas>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Untuk grafik -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> <!-- Pustaka Leaflet -->
-    <script>
-        // Animasi untuk teks terminal
-        document.addEventListener('DOMContentLoaded', () => {
-            const terminalText = document.getElementById('terminal-text');
-            terminalText.textContent = 'Initializing system...\nConnection Established\nRunning Diagnostics...';
+    <!-- Console yang meniru tampilan terminal -->
+    <div id="console">
+        > Welcome to Hacker Console.<br>
+        > Initializing system...<br>
+        > System ready.<br>
+    </div>
 
-            // Membuat grafik data
-            const ctx = document.getElementById('data-graph').getContext('2d');
-            const dataGraph = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'System Activity',
-                        data: [12, 19, 3, 5, 2, 3, 9],
-                        borderColor: '#00ff00',
-                        borderWidth: 2,
-                        fill: false
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: '#00ff00'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: '#00ff00'
-                            }
-                        }
+    <!-- Mengimpor pustaka Leaflet.js -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Inisialisasi peta dengan koordinat dan zoom level
+        var map = L.map('map').setView([51.505, -0.09], 3);  // Menampilkan seluruh dunia
+
+        // Menambahkan tile layer (peta OpenStreetMap)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Menambahkan marker dan popup pada beberapa lokasi
+        L.marker([51.5, -0.09]).addTo(map)
+            .bindPopup('<div class="popup-content">London - Hacker Central</div>')
+            .openPopup();
+
+        L.marker([40.7128, -74.0060]).addTo(map)
+            .bindPopup('<div class="popup-content">New York - Data Hub</div>');
+
+        L.marker([37.7749, -122.4194]).addTo(map)
+            .bindPopup('<div class="popup-content">San Francisco - Silicon Valley</div>');
+
+        L.marker([35.6762, 139.6503]).addTo(map)
+            .bindPopup('<div class="popup-content">Tokyo - Tech Empire</div>');
+    </script>
+
+    <!-- Membuat Diagram menggunakan Chart.js -->
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Hacking', 'Coding', 'Security', 'Exploring', 'Networking'],
+                datasets: [{
+                    label: 'Skills of a Hacker',
+                    data: [90, 85, 95, 80, 70],
+                    backgroundColor: 'rgba(0, 255, 0, 0.6)',
+                    borderColor: 'rgba(0, 255, 0, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
-            });
-
-            // Inisialisasi peta dengan Leaflet.js
-            const map = L.map('world-map').setView([0, 0], 2); // Koordinat untuk pusat peta dan zoom level
-
-            // Menambahkan layer peta menggunakan OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            // Mengubah warna peta menjadi hijau neon dengan filter CSS
-            map.getPanes().overlayPane.style.filter = 'hue-rotate(120deg)';
-
-            // Membuat titik acak di peta dengan warna hijau neon
-            L.circle([51.505, -0.09], {
-                color: 'green',
-                fillColor: '#00ff00',
-                fillOpacity: 0.5,
-                radius: 50000
-            }).addTo(map);
-
-            // Peta dengan zoom dan interaktivitas
-            map.scrollWheelZoom.enable();
+            }
         });
     </script>
 </body>
