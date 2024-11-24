@@ -302,7 +302,7 @@
             const hashRate = Math.floor(Math.random() * 1000) + 500; // Simulate hash rate data
             // Add data to the chart
             hashRateChart.data.labels.push(time);
-            hashRateChart.data.datasets[0].data.push(hashRate);
+            hashRateChart.data.datasets[0].data.push(speed);
 
             // Limit the data shown on the chart to the latest 20 points
             if (hashRateChart.data.labels.length > 20) {
@@ -324,7 +324,7 @@
         }
 
         setInterval(() => {
-            logToConsole(`${Math.floor(Math.random() * 1000) + 500} H/s`);
+            logToConsole(`Total ${total(Math.random() * 1000) + 500} H/s`);
         }, 1000); // Update console every 1 seconds
     // system information
         
@@ -378,4 +378,4 @@
     }, 1000); // Update setiap 1 detik
     </script>
 </body>
-</html>                 
+</html>
