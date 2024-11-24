@@ -4,136 +4,153 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hacker Theme - Map, Diagram & Console</title>
-    <!-- Link ke stylesheet Leaflet.js -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Gaya halaman dengan tema hacker */
+        /* Gaya dasar */
         body {
             background-color: #1a1a1a;
             color: #00ff00;
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
-            text-align: center;
         }
 
         h1 {
             color: #00ff00;
-            font-size: 3em;
-            margin-top: 20px;
+            font-size: 2em;
+            text-align: center;
+            margin: 20px 0;
         }
 
-        /* Gaya untuk div peta */
-        #map {
-            height: 600px;
-            width: 100%;
-            border: 2px solid #00ff00;
-        }
-
-        /* Gaya untuk elemen lainnya seperti teks */
-        .content {
-            margin: 20px;
-            font-size: 1.2em;
-        }
-
-        .popup-content {
-            color: #00ff00;
-            font-size: 1.1em;
-        }
-
-        /* Gaya untuk Console */
-        #console {
-            background-color: #111;
-            color: #00ff00;
-            font-family: 'Courier New', Courier, monospace;
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
             padding: 20px;
-            margin-top: 20px;
-            height: 200px;
-            overflow-y: scroll;
-            border: 1px solid #00ff00;
-            white-space: pre-wrap;
         }
 
-        /* Gaya untuk diagram */
+        /* Peta */
+        #map {
+            width: 300px;
+            height: 100px;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+
+        /* Diagram */
         #chart-container {
-            margin: 40px auto;
-            width: 80%;
+            width: 90%;
             max-width: 800px;
         }
 
+        canvas {
+            background: #111;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+
+        /* Console */
+        #console {
+            width: 90%;
+            max-width: 800px;
+            background-color: #111;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 15px;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        /* Responsif untuk mobile */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            #map, canvas, #console {
+                width: 100%;
+                box-shadow: none;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Hacker Theme - Map, Diagram & Console</h1>
-    <div class="content">
-        <p>Welcome to the hacker world! This page has everything you need: a map, a diagram, and a console for that futuristic hacker vibe.</p>
-    </div>
-    
-    <!-- Tempat peta akan muncul -->
-    <div id="map"></div>
+    <h1>Hacker Dashboard</h1>
+    <div class="container">
+        <!-- Peta -->
+        <div id="map"></div>
 
-    <!-- Tempat untuk diagram -->
-    <div id="chart-container">
-        <canvas id="myChart"></canvas>
-    </div>
+        <!-- Diagram -->
+        <div id="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
 
-    <!-- Console yang meniru tampilan terminal -->
-    <div id="console">
-        > Welcome to Hacker Console.<br>
-        > Initializing system...<br>
-        > System ready.<br>
+        <!-- Console -->
+        <div id="console">
+            > Welcome to Hacker Console.<br>
+            > Initializing system...<br>
+            > System ready.<br>
+        </div>
     </div>
 
-    <!-- Mengimpor pustaka Leaflet.js -->
+    <!-- Leaflet.js -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Inisialisasi peta dengan koordinat dan zoom level
-        var map = L.map('map').setView([51.505, -0.09], 3);  // Menampilkan seluruh dunia
+        // Inisialisasi peta
+        var map = L.map('map').setView([51.505, -0.09], 2);
 
-        // Menambahkan tile layer (peta OpenStreetMap)
+        // Tile layer dengan warna hijau
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         }).addTo(map);
 
-        // Menambahkan marker dan popup pada beberapa lokasi
-        L.marker([51.5, -0.09]).addTo(map)
-            .bindPopup('<div class="popup-content">London - Hacker Central</div>')
-            .openPopup();
-
-        L.marker([40.7128, -74.0060]).addTo(map)
-            .bindPopup('<div class="popup-content">New York - Data Hub</div>');
-
-        L.marker([37.7749, -122.4194]).addTo(map)
-            .bindPopup('<div class="popup-content">San Francisco - Silicon Valley</div>');
-
-        L.marker([35.6762, 139.6503]).addTo(map)
-            .bindPopup('<div class="popup-content">Tokyo - Tech Empire</div>');
+        // Menambahkan marker
+        L.marker([51.5, -0.09]).addTo(map).bindPopup('London - Hacker Central').openPopup();
     </script>
 
-    <!-- Membuat Diagram menggunakan Chart.js -->
+    <!-- Chart.js -->
     <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
+        // Data untuk diagram
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line', // Ubah ke 'line' agar lebih futuristik
             data: {
                 labels: ['Hacking', 'Coding', 'Security', 'Exploring', 'Networking'],
                 datasets: [{
-                    label: 'Skills of a Hacker',
+                    label: 'Skills Progress',
                     data: [90, 85, 95, 80, 70],
-                    backgroundColor: 'rgba(0, 255, 0, 0.6)',
-                    borderColor: 'rgba(0, 255, 0, 1)',
-                    borderWidth: 1
+                    borderColor: '#00ff00',
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
                 }]
             },
             options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#00ff00',
+                        }
+                    }
+                },
                 scales: {
+                    x: {
+                        ticks: { color: '#00ff00' },
+                        grid: { color: '#333' }
+                    },
                     y: {
-                        beginAtZero: true
+                        ticks: { color: '#00ff00' },
+                        grid: { color: '#333' }
                     }
                 }
             }
         });
     </script>
 </body>
-</html>
+    </html>
