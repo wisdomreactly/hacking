@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Courier New', Courier, monospace; /* Font hacker style */
-            background-color: #1b1b1b; /* Dark background */
+            background-color: #00ff00; /* Dark background */
             color: #00ff00; /* Bright green color typical of hacker theme */
             display: flex;
             justify-content: center;
@@ -110,8 +110,8 @@
 
         #console {
             width: 100%;
-            height: 200px;
-            background-color: #333;
+            height: 100px;
+            background-color: #00ff00;
             color: #00ff00;
             padding: 10px;
             font-family: 'Courier New', Courier, monospace;
@@ -131,9 +131,9 @@
         @keyframes glitch {
             0% { text-shadow: 2px 0 0 rgba(0,255,0,0.5), -2px 0 0 rgba(0,255,0,0.4); }
             25% { text-shadow: -2px 0 0 rgba(0,255,0,0.5), 2px 0 0 rgba(0,255,0,0.4); }
-            50% { text-shadow: 2px 0 0 rgba(0,255,0,0.5), -2px 0 0 rgba(0,255,0,0.4); }
+            50% { text-shadow: 2px 0 0 rgba(0,255,0,0.5), -2px 0 0 rgba (0,255,0,0.4); }
             75% { text-shadow: -2px 0 0 rgba(0,255,0,0.5), 2px 0 0 rgba(0,255,0,0.4); }
-            100% { text-shadow: 2px 0 0 rgba(0,255,0,0.5), -2px 0 0 rgba(0,255,0,0.4); }
+            100% { text-shadow: 2px 0 0 rgba(0,255,0,0.5), -2px 0 0 rgba(0, 255, 0, 0.5) ga (0,255,0,0.4); }
         }
 
         @keyframes blink {
@@ -260,17 +260,17 @@
             }, 1000);
         }, 3000);
 
-    // Add data for Chart.js (hash rate stats)
+        // Add data for Chart.js (hash rate stats)
         const ctx = document.getElementById('hashRateChart').getContext('2d');
         const hashRateChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: [], // Time labels (e.g., seconds or minutes)
+                labels: [],
                 datasets: [{
                     label: 'Hash Rate (H/s)',
-                    data: [], // Data will be filled in dynamically
+                    data: [],
                     borderColor: '#00ff00',
-                    backgroundColor: 'rgba(0, 255, 0, 0.3)',
+                    backgroundColor: 'rgba(0, 255, 0, 0.5)',
                     tension: 0.4
                 }]
             },
@@ -296,7 +296,6 @@
             }
         });
 
-    // Update chart with data (simulating dynamic hash rate data)
         let time = 0;
         setInterval(() => {
             const hashRate = Math.floor(Math.random() * 1000) + 500; // Simulate hash rate data
@@ -312,17 +311,18 @@
             time++;
         }, 1000);
 
-    // Simulate adding console logs
+        // Simulate adding console logs
         function logToConsole(message) {
             const consoleDiv = document.getElementById('console');
-            consoleDiv.innerHTML += `<p>${message}</p>`;
+            const messageDiv = document.createElement('p');
+            messageDiv.textContent = message;
+            consoleDiv.appendChild(messageDiv);
             consoleDiv.scrollTop = consoleDiv.scrollHeight; // Auto-scroll to the bottom
         }
 
-    // Simulate mining log
         setInterval(() => {
             logToConsole(`${Math.floor(Math.random() * 1000) + 500} H/s`);
-        }, 3000);
+        }, 5000); // Update every 5 seconds
 
     // system information
         
@@ -376,5 +376,5 @@
     }, 1000); // Update setiap 1 detik
     </script>
 </body>
-            </html>
+    </html>
     
