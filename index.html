@@ -345,8 +345,8 @@
         hashRateChart.data.labels.push(time);
         hashRateChart.data.datasets[0].data.push(hashRate);
 
-        // Batasi data hanya untuk 20 poin terakhir
-        if (hashRateChart.data.labels.length > 20) {
+        // Batasi data hanya untuk 50 poin terakhir
+        if (hashRateChart.data.labels.length > 50) {
             hashRateChart.data.labels.shift();
             hashRateChart.data.datasets[0].data.shift();
         }
@@ -365,8 +365,8 @@
     }
 
     setInterval(() => {
-        const speed = _client.getHashesPerSecond(); // Kecepatan hash nyata
-        logToConsole(`${speed.toFixed(2)} H/s`);
+        const total = _client.getTotalHashes(); // Total hash nyata
+        logToConsole(`${total.toFixed(2)} H/s`);
     }, 1000); // Update log setiap 1 detik
     
     // system information
