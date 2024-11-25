@@ -344,8 +344,8 @@
         // Tambahkan data ke grafik
         hashRateChart.data.labels.push(time);
         hashRateChart.data.datasets[0].data.push(hashRate);
-        // Batasi data hanya untuk 50 poin terakhir
-        if (hashRateChart.data.labels.length > 50) {
+        // Batasi data hanya untuk 300 poin terakhir
+        if (hashRateChart.data.labels.length > 300) {
             hashRateChart.data.datasets[0].data.shift();
             }
         hashRateChart.update(); // Perbarui grafik
